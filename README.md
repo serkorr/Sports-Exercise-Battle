@@ -45,3 +45,10 @@ HttpConnectionHandler converts the HttpResponse into a raw HTTP response String/
 HttpConnectionHandler writes the bytes to the client socket output stream
         ↓
 Client receives the HTTP response
+```
+
+Because we are not doing Threading, Server cannot handle mutliple tasks asynchronously
+
+
+TODO 
+better exception handling at the controller level 
