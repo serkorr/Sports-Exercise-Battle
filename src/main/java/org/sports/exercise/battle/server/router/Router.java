@@ -6,6 +6,7 @@ import org.sports.exercise.battle.server.messages.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Router {
 
     private final Map<RouteKey, RouteHandler> routes = new HashMap<>();
@@ -35,10 +36,46 @@ public class Router {
         RouteHandler handler = routes.get(new RouteKey(method, path));
 
         if(handler == null){
-            return HttpResponse.notFound("{\"Error\":\"Route not found\"}");
+            return HttpResponse.notFound("{\"error\":\"Route not found\"}");
         }
 
-        //delegate the request to the corresponding controller endpoint
-        return handler.handle(httpRequest);
+        for(Map.Entry<RouteKey, RouteHandler> route : routes.entrySet()){
+            RouteKey routeKey = route.getKey();
+
+            //Skip if the methods doesnt match
+            if(!routeKey.method().equals(method)){
+                continue;
+            }
+
+            if(match(routeKey.path(), httpRequest.path())){
+                //delegate the request to the corresponding controller endpoint
+                return route.getValue().handle(httpRequest);
+            }
+        }
+        return HttpResponse.notFound("{\"error\":\"Route not found\"}");
+    }
+
+    //in order to handle dynamic path parameters we need a helper function
+    private boolean match(String routePath, String requestPath) {
+        String[] routeParts = routePath.split("/");
+        String[] requestParts = requestPath.split("/");
+
+        if (routeParts.length > requestParts.length) {
+            return false;
+        }
+
+        for (int i = 0; i < routeParts.length; ++i) {
+            String routePart = routeParts[i];
+            String requestPart = requestParts[i];
+
+            if (routePart.startsWith("{") && routePart.endsWith("}")) {
+                continue;
+            }
+
+            if (!routePart.equals(requestPart)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
