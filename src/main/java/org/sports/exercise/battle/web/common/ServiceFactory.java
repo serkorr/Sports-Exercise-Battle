@@ -1,11 +1,9 @@
 package org.sports.exercise.battle.web.common;
 
 import org.sports.exercise.battle.application.common.UserDTOConverter;
-import org.sports.exercise.battle.application.services.HistoryService;
-import org.sports.exercise.battle.application.services.ScoreboardService;
-import org.sports.exercise.battle.application.services.StatsService;
-import org.sports.exercise.battle.application.services.UserService;
+import org.sports.exercise.battle.application.services.*;
 import org.sports.exercise.battle.infrastructure.repositories.JDBCPushUpRecordRepository;
+import org.sports.exercise.battle.infrastructure.repositories.JDBCTournamentRepository;
 import org.sports.exercise.battle.infrastructure.repositories.JDBCUserRepository;
 
 import java.sql.Connection;
@@ -26,5 +24,9 @@ public class ServiceFactory {
 
     public HistoryService createHistoryService(Connection connection){
         return new HistoryService(new JDBCUserRepository(connection), new JDBCPushUpRecordRepository(connection));
+    }
+
+    public TournamentService createTournamentService(Connection connection){
+        return new TournamentService(new JDBCTournamentRepository(connection));
     }
 }

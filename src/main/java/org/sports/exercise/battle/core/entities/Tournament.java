@@ -9,7 +9,7 @@ public class Tournament {
     private Instant startedAt;
     private Instant endedAt;
 
-    public Tournament(UUID id, Instant startedAt, TournamentStatus status, Instant endedAt) {
+    public Tournament(UUID id, Instant startedAt, Instant endedAt, TournamentStatus status) {
         this.id = id;
         this.startedAt = startedAt;
         this.status = status;
@@ -30,5 +30,13 @@ public class Tournament {
 
     public Instant getEndedAt() {
         return endedAt;
+    }
+
+    public boolean hasFinished(){
+        return Instant.now().isAfter(endedAt);
+    }
+
+    public void finish(){
+        this.status = TournamentStatus.FINISHED;
     }
 }
