@@ -7,9 +7,12 @@ import org.sports.exercise.battle.application.ports.PushUpRecordRepository;
 import org.sports.exercise.battle.application.ports.UserRepository;
 import org.sports.exercise.battle.application.requests.AddPushUpRecordRequest;
 import org.sports.exercise.battle.core.entities.PushUpRecord;
+import org.sports.exercise.battle.core.entities.Tournament;
 import org.sports.exercise.battle.core.entities.User;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 public class HistoryService {
     private final UserRepository userRepository;
@@ -20,15 +23,26 @@ public class HistoryService {
         this.pushUpRecordRepository = pushUpRecordRepository;
     }
 
-    public PushUpRecordDTO addPushUpRecord(AddPushUpRecordRequest request, String authenticatedName){
+    public PushUpRecordDTO addPushUpRecord(AddPushUpRecordRequest request, String authenticatedName, Tournament tournament){
         User user = userRepository.findByUsernameOrThrowNotFound(authenticatedName);
-        return null;//placeholder
+
+        PushUpRecord pushUpRecord = new PushUpRecord(
+                UUID.randomUUID(),
+                user.getId(),
+                tournament.getId(),
+                request.name(),
+                request.count(),
+                request.durationInSeconds(),
+                Instant.now()
+        );
+
+        pushUpRecordRepository.save(pushUpRecord);
+
+        return new PushUpRecordDTO(pushUpRecord.getName(), pushUpRecord.getCount(), pushUpRecord.getDurationInSeconds());
     }
 
     public PushUpHistoryResponse getUserPushUpHistory(String authenticatedName){
         User user = userRepository.findByUsernameOrThrowNotFound(authenticatedName);
-
-        //PushUpHistory response consists of PushupHistory entry containing date, count, duration in seconds
 
         List<PushUpRecord> pushUpRecords = pushUpRecordRepository.findByUserId(user.getId());
 
