@@ -27,7 +27,7 @@ public class ServerRequestHandler {
         }catch(UnauthorizedException e){
             return HttpResponse.unauthorized("{\"error\":\"" + e.getMessage() + "\"}");
         }catch(Exception e){
-            return HttpResponse.internalServerError("{\"error\":\"" + e.getMessage() + "\"}");
+            return HttpResponse.internalServerError("{\"error\":\"Internal Server Error\"}");
         }
     }
 }
