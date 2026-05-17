@@ -15,7 +15,7 @@ public class PasswordHasher {
     private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    public static String hashPassword(char[] password) throws Exception{
+    public static String hashPassword(char[] password){
         try {
             //generate random salt
             byte[] salt = new byte[16];
@@ -29,6 +29,8 @@ public class PasswordHasher {
             //combine salt and hash
             //format salt:hash
             return Base64.getEncoder().encodeToString(salt) + ":" + Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
         } finally{
             //zero out the password for security
             Arrays.fill(password, '\0');

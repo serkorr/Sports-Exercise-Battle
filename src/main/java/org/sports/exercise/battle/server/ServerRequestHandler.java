@@ -20,7 +20,6 @@ public class ServerRequestHandler {
 
     public HttpResponse handle(HttpRequest httpRequest){
         try{
-            logger.info(httpRequest.method() + " " + httpRequest.path());
             return router.route(httpRequest);
         }catch(BadRequestException e){
             return HttpResponse.badRequest("{\"error\":\"" + e.getMessage() + "\"}");

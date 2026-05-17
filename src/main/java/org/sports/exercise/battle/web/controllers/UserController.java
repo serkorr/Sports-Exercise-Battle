@@ -42,8 +42,6 @@ public class UserController {
 
             UserDTO userDTO = userService.register(registerUserRequest);
 
-            logger.info("User registration successfull for user: " + userDTO.username());
-
             String json = marshaller.marshalToJSON(userDTO);
 
             return HttpResponse.created(json);

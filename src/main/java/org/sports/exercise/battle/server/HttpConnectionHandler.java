@@ -29,8 +29,6 @@ public class  HttpConnectionHandler {
 
     public void handle(Socket clientSocket){
         try(clientSocket){
-            logger.info("Client connected: " + clientSocket.getInetAddress().getHostAddress());
-
             String rawRequest = readRawRequest(clientSocket);
 
             //converting into HttpRequest
