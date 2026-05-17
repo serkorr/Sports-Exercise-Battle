@@ -10,5 +10,6 @@ public interface TournamentRepository {
     Optional<Tournament> findById(UUID id);
     Optional<Tournament> findRunningTournament();
     void update(Tournament tournament);
+    Optional<Tournament> findLatestTournament();
     void deleteById(UUID id);
 }
