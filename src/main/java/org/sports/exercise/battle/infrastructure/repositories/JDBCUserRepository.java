@@ -93,7 +93,7 @@ public class JDBCUserRepository implements UserRepository {
     @Override
     public List<User> findAll() {
         String sql = """
-                SELECT id, password_hash, name, bio, image, elo
+                SELECT id, username, password_hash, name, bio, image, elo
                 FROM users
                 """;
 
