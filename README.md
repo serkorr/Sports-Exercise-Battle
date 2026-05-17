@@ -1,21 +1,22 @@
 # Sports-Exercise-Battle
 
-Current Flow is: 
+# How to start the server
+First make sure that the Postgres SQL DB is running `docker compose up -d` and when you don't want 
+the DB to persists tear it down `docker compose down -v`, this will clean up the DB. 
 
-The ServerRequest Handler is the global request handler, delegates the routing handling to the Router
+The main class file is located in the src root and will create the router with the corresponding endpoints via their controllers. 
+It will create the ServerRequestHandler for global exception handling and the HTTPConnectionHandler to handle client requests and sends back responses back to the client.
+A DBInitializer class is used to create the specific tables (tournaments, pushup records, users) to let the data persists in the SQL DB. 
 
-The Router stores a RouteKey and a RouteHandler for each controller 
+Then it will start the server to listen to incoming client connection (accepting the client socket).
 
+# Unique Feature
+A unqiue feature of achievements have been added to the project. It goes through the endpoint `/achievements` and will send back 
+some custom achievements based on the elo and the total pushups of the user
 
-The Router delegates the HTTPRequest to the correct Endpoint through a functional interface declared in the RouteHandler
-It allows controller methods to be registered as endpoint handlers
-
-Example:
-```java 
-router.post("/login", authController::login)
-```
-
-The Endpoint calls it and can send back various Exceptions (BadRequest Exception, )
+# Testing 
+You can run the test through `mvn test` and it will test the project. The custom automated integration tests for the unique features have also been 
+provided in the project root `custom_seb.curl.bat`, which tests if the achievement endpoint works correctly. 
 
 ## Request/Response Flow
 
@@ -47,8 +48,17 @@ HttpConnectionHandler writes the bytes to the client socket output stream
 Client receives the HTTP response
 ```
 
-Because we are not doing Threading, Server cannot handle mutliple tasks asynchronously
+# Personal Notes for the Project 
+Current Flow is:
 
+The ServerRequest Handler is the global request handler, delegates the routing handling to the Router. 
+The Router stores a RouteKey and a RouteHandler for each controller.
+The Router delegates the HTTPRequest to the correct Endpoint through a functional interface declared in the RouteHandler.
+It allows controller methods to be registered as endpoint handlers
 
-TODO 
-better exception handling at the controller level 
+Example:
+```java 
+router.post("/login", authController::login)
+```
+
+The Endpoint calls it and can send back various Exceptions (BadRequest Exception)
