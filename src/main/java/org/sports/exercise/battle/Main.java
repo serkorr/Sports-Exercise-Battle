@@ -33,12 +33,6 @@ public class Main {
             throw new RuntimeException("Could not initialize database, e");
         }
 
-        //create controllers
-
-        //create services
-
-        //start the server
-
         server.start();
     }
 }

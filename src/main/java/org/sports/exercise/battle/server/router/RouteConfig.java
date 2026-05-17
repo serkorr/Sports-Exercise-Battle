@@ -8,7 +8,6 @@ import org.sports.exercise.battle.web.common.ServiceFactory;
 import org.sports.exercise.battle.web.controllers.*;
 
 public class RouteConfig {
-    //i think this method is doing too much
     public static Router createRouter(){
         Router router = new Router();
 
@@ -21,6 +20,7 @@ public class RouteConfig {
         StatsController statsController = new StatsController(serviceFactory, jsonMessageMarshaller, authService);
         HistoryController historyController = new HistoryController(serviceFactory, jsonMessageMarshaller, authService);
         TournamentController tournamentController = new TournamentController(serviceFactory, jsonMessageMarshaller, authService);
+        AchievementController achievementController = new AchievementController(serviceFactory, jsonMessageMarshaller, authService);
 
         //user registering - authentication
         router.post("/users", userController::register);
@@ -31,16 +31,18 @@ public class RouteConfig {
         router.put("/users/{username}", userController::updateProfile);
 
         //stats - scoreboard
-        router.put("/stats", statsController::getUserStats);
-        router.put("/score", scoreController::getScoreboard);
+        router.get("/stats", statsController::getUserStats);
+        router.get("/score", scoreController::getScoreboard);
 
         //pushup history
         router.get("/history", historyController::getUserPushUpHistory);
         router.post("/history", historyController::addPushUpRecord);
 
-        //tournament
-        //router.get("/tournament", tournamentController::getTournament);
+        //tournaments
+        router.get("/tournament", tournamentController::getTournamentInformation);
 
+        //unique mandatory feature - achievements
+        router.get("/achievements", achievementController::getAchievement);
 
         return router;
     }
