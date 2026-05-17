@@ -35,8 +35,8 @@ public class Router {
         //looks for the registered handler for this method and path combination
         RouteHandler handler = routes.get(new RouteKey(method, path));
 
-        if(handler == null){
-            return HttpResponse.notFound("{\"error\":\"Route not found\"}");
+        if(handler != null){
+            return handler.handle(httpRequest);
         }
 
         for(Map.Entry<RouteKey, RouteHandler> route : routes.entrySet()){
