@@ -13,10 +13,12 @@ import org.sports.exercise.battle.core.entities.User;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class HistoryService {
     private final UserRepository userRepository;
     private final PushUpRecordRepository pushUpRecordRepository;
+    private static final Logger logger = Logger.getLogger(HistoryService.class.getName());
 
     public HistoryService(UserRepository userRepository, PushUpRecordRepository pushUpRecordRepository){
         this.userRepository = userRepository;
@@ -35,6 +37,10 @@ public class HistoryService {
                 request.durationInSeconds(),
                 Instant.now()
         );
+
+        logger.info("User " + user.getUsername()
+                + " added " + request.count()
+                + " push-ups to tournament " + tournament.getId());
 
         pushUpRecordRepository.save(pushUpRecord);
 
