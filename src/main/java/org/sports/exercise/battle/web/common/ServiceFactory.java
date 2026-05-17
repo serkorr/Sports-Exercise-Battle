@@ -27,6 +27,10 @@ public class ServiceFactory {
     }
 
     public TournamentService createTournamentService(Connection connection){
-        return new TournamentService(new JDBCTournamentRepository(connection));
+        return new TournamentService(new JDBCTournamentRepository(connection), new JDBCPushUpRecordRepository(connection), new JDBCUserRepository(connection));
+    }
+
+    public AchievementService createAchievementService(Connection connection){
+        return new AchievementService(new JDBCPushUpRecordRepository(connection), new JDBCUserRepository(connection));
     }
 }
