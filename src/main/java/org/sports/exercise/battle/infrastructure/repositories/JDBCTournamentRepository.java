@@ -107,6 +107,28 @@ public class JDBCTournamentRepository implements TournamentRepository {
     }
 
     @Override
+    public Optional<Tournament> findLatestTournament() {
+        String sql = """
+                SELECT id, started_at, ended_at, status
+                    FROM tournaments
+                    ORDER BY started_at DESC
+                    LIMIT 1
+                """;
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(convertToTournament(resultSet));
+                }
+
+                return Optional.empty();
+            }
+        }catch(SQLException e){
+            throw new RuntimeException("Could not find latest tournament", e);
+        }
+    }
+
+    @Override
     public void deleteById(UUID id) {
         String sql = """
                 DELETE from tournaments
