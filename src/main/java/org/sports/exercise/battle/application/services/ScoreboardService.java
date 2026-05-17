@@ -40,10 +40,23 @@ public class ScoreboardService {
 
         //rank the users now
         List<UserRanking> placements = new ArrayList<>();
+
+        int placement = 1;
+
         for(int i = 0; i < userRankings.size(); ++i){
             UserRanking ranking = userRankings.get(i);
 
-            placements.add(new UserRanking(i, ranking.username(), ranking.elo(), ranking.totalPushUps()));
+            if(i > 0){
+                UserRanking previous = userRankings.get(i -1);
+
+                boolean sameRanking = ranking.elo() == previous.elo() && ranking.totalPushUps() == previous.totalPushUps();
+
+                if(!sameRanking){
+                    placement = i + 1;
+                }
+            }
+
+            placements.add(new UserRanking(placement, ranking.username(), ranking.elo(), ranking.totalPushUps()));
         }
 
         return new ScoreboardResponse(placements);
